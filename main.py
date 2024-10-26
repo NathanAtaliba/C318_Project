@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split, GridSearchCV
 import xgboost as xgb
 import numpy as np
 
@@ -49,7 +50,6 @@ dfFiltrado['Categoria2'] = pd.cut(dfFiltrado['Valor Venda'], bins=bins2, labels=
 # Contando a frequência em cada categoria
 QtdValorVenda = dfFiltrado['Categoria2'].value_counts()
 ##############
-
 
 # Gráfico 1: Quartos
 plt.figure(figsize=(10,6)) 
@@ -116,12 +116,25 @@ y = dfFiltrado['Valor Venda']
 # Dividindo os dados em treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Definindo os parâmetros para GridSearchCV
+param_grid = {
+    'n_estimators': [50, 100, 150],
+    'learning_rate': [0.01, 0.05, 0.1],
+    'max_depth': [3, 5, 7],
+    'subsample': [0.8, 1.0],
+    'colsample_bytree': [0.8, 1.0]
+}
+
 # Treinando o modelo XGBoost
-model = xgb.XGBRegressor(objective='reg:squarederror', n_estimators=100, learning_rate=0.05)
+model = xgb.XGBRegressor(objective='reg:squarederror')
+# Executando o Grid Search
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, scoring='neg_mean_absolute_error', cv=5, verbose=1)
+grid_search.fit(X_train, y_train)
 model.fit(X_train, y_train)
 
-# Fazendo previsões
-y_pred = model.predict(X_test)
+# Treinando o modelo com os melhores parâmetros
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
 
 # Avaliação usando RMSE
 # RSME preve o quanto as previsões estão variando do valor real em reais.
@@ -133,4 +146,7 @@ mae = mean_absolute_error(y_test, y_pred)
 print(f"MAE: {mae}")
 
 # Exibe todos os gráficos
+xgb.plot_importance(best_model)
+plt.title('Importância das Features')
+
 plt.show()
