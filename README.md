@@ -15,6 +15,8 @@ Repositorio criado para trabalho em grupo da disciplina de C318
 # 2- Foi avaliado grafico de cada variavel para verificar anormalidade:
 
     Percebemos que tinham linhas que não continham os valores de alguma variavel, resolvemos descarta-las e seguir com apenas as que tinham linhas completa.
+    ![Descrição da imagem](./img/primeiros_resultados/Area_total.png)
+
 
 # 3- Foi avaliado novos graficos para verificar se o dataset estava normalizado:
 
