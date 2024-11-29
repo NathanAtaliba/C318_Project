@@ -117,6 +117,10 @@ Os resultados não agradaram muito, pela margem de erro, decidimos dividir o dat
     RMSE: 131955.3321247353
     MAE: 88781.97039473684
 
+#### DIVISÃO GERAL: R$50.000 a R$5.000.000
+	RMSE: 77419.83838332203
+	MAE: 45303.575050850595
+
 
 
 
